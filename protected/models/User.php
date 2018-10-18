@@ -78,9 +78,12 @@ class User extends Model
             array('address, email, description, doc', 'length', 'max' => 100),
             array('credit', 'type', 'type' => 'double'),
             array('expirationdate, password, lastuse', 'length', 'max' => 100),
+            array('techprefix', 'length', 'max' => 6),
             array('username', 'checkusername'),
             array('password', 'checksecret'),
             array('username', 'unique', 'caseSensitive' => 'false'),
+            array('techprefix', 'checktechprefix'),
+            array('techprefix, callingcard_pin', 'unique'),
 
         );
     }
@@ -95,6 +98,19 @@ class User extends Model
             $this->addError($attribute, Yii::t('yii', 'Username need start with numbers or letters'));
         }
 
+    }
+
+    public function checktechprefix($attribute, $params)
+    {
+        $config = LoadConfig::getConfig();
+        $length = $config['global']['ip_tech_length'];
+
+        if (strlen($this->techprefix) != $length) {
+            $this->addError($attribute, Yii::t('yii', 'Techprefix have a invalid length'));
+        }
+        if (strlen($this->techprefix) > 6) {
+            $this->addError($attribute, Yii::t('yii', 'Techprefix maximum length is 6'));
+        }
     }
 
     public function checksecret($attribute, $params)

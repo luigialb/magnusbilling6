@@ -414,6 +414,14 @@ class UserController extends Controller
         ));
     }
 
+    public function actionGetNewTechPrefix()
+    {
+        echo json_encode(array(
+            $this->nameSuccess => true,
+            'newTechprefix'    => Util::generateTechPrefix(),
+        ));
+    }
+
     public function actionBulk()
     {
         $values = $this->getAttributesRequest();
